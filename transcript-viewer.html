@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Transcript Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 3px solid gold;
+        }
+        h1 {
+            text-align: center;
+            color: #d9534f;
+            background-color: gold;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-box input {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .search-box button {
+            padding: 10px 15px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-box button:hover {
+            background-color: #555;
+        }
+        .content {
+            display: flex;
+            margin-top: 20px;
+        }
+        .transcript-container, .bio-container {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 10px;
+            background-color: white;
+            height: 600px;
+            overflow-y: auto;
+            border: 3px solid gold;
+        }
+        .transcript-container h2, .bio-container h2 {
+            color: #d9534f;
+            margin-top: 0;
+            padding-bottom: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: gold;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 1px;
+            border-top-right-radius: 1px;
+        }
+        pre {
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-style: italic;
+            color: #777;
+        }
+        .error {
+            color: #D32F2F;
+            padding: 10px;
+            background-color: #FFEBEE;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .generate-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .generate-btn:hover {
+            background-color: #555;
+        }
+        .generate-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .nav-bar {
+            width: 100%;
+            height: 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            color: white;
+            box-sizing: border-box;
+        }
+        .nav-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .nav-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-icon">☰</div>
+        <div class="nav-title">Transcript Viewer</div>
+        <div class="nav-icon">👤</div>
+    </div>
+    
+    <div class="container">
+        <h1>Call Transcript Viewer & Biography Generator</h1>
+        
+        <div class="search-box">
+            <input type="text" id="callId" placeholder="Enter Call ID" />
+            <button id="load-btn">Load Transcript</button>
+        </div>
+        
+        <div class="content">
+            <div class="transcript-container">
+                <h2>Call Transcript</h2>
+                <div id="transcriptContent">
+                    <div class="loading">Enter a Call ID and click "Load Transcript"</div>
+                </div>
+            </div>
+            
+            <div class="bio-container">
+                <h2>Biography</h2>
+                <div id="biographyContent">
+                    <div class="loading">Biography will appear here once generated</div>
+                </div>
+                <button id="generateBioBtn" class="generate-btn" disabled>Generate Biography</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:8080/api";
+        let currentTranscript = '';
+
+        document.getElementById('load-btn').addEventListener('click', loadTranscript);
+        document.getElementById('callId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadTranscript();
+            }
+        });
+        document.getElementById('generateBioBtn').addEventListener('click', generateBiography);
+
+        async function loadTranscript() {
+            const callId = document.getElementById('callId').value.trim();
+            if (!callId) {
+                showError('transcriptContent', 'Please enter a Call ID');
+                return;
+            }
+
+            const transcriptContent = document.getElementById('transcriptContent');
+            transcriptContent.innerHTML = '<div class="loading">Loading transcript...</div>';
+            document.getElementById('generateBioBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/get-transcript`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ call_id: callId })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch transcript');
+                }
+
+                const data = await response.json();
+                if (!data.transcript) {
+                    throw new Error('No transcript available for this call');
+                }
+
+                currentTranscript = data.transcript;
+                transcriptContent.innerHTML = `<pre>${formatTranscript(data.transcript)}</pre>`;
+                document.getElementById('generateBioBtn').disabled = false;
+            } catch (error) {
+                showError('transcriptContent', error.message);
+            }
+        }
+
+        async function generateBiography() {
+            if (!currentTranscript) {
+                showError('biographyContent', 'No transcript available');
+                return;
+            }
+
+            const biographyContent = document.getElementById('biographyContent');
+            const generateBioBtn = document.getElementById('generateBioBtn');
+            
+            biographyContent.innerHTML = '<div class="loading">Generating biography...</div>';
+            generateBioBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/generate-biography`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ transcript: currentTranscript })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate biography');
+                }
+
+                const data = await response.json();
+                const biography = data.biography;
+                biographyContent.innerHTML = `<pre>${biography}</pre>`;
+            } catch (error) {
+                showError('biographyContent', error.message);
+            } finally {
+                generateBioBtn.disabled = false;
+            }
+        }
+
+        function formatTranscript(transcript) {
+            return transcript.split('\n').map(line => {
+                if (line.startsWith('AGENT:')) {
+                    return `<span style="color: #666;">${line}</span>`;
+                }
+                return line;
+            }).join('\n');
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="error">${message}</div>`;
+        }
+    </script>
+</body>
+</html> 

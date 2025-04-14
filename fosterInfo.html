@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foster Information - Foster AI Call and Biography Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 3px solid gold;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #d9534f;
+            background-color: gold;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            word-wrap: break-word;
+        }
+        .nav-bar {
+            width: 100%;
+            min-height: 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 20px;
+            color: white;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+        .nav-title {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: bold;
+            padding: 10px 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+        .nav-links a:hover {
+            background-color: #555;
+        }
+        .content {
+            padding: 10px;
+        }
+        .form-section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .form-section h2 {
+            color: #d9534f;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid gold;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: gold;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .customer-list {
+            margin-top: 20px;
+        }
+        .customer-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border-left: 4px solid gold;
+        }
+        .customer-info {
+            margin-bottom: 10px;
+        }
+        .customer-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .customer-actions button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+        }
+        .error {
+            color: #d9534f;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .success-message {
+            background-color: rgba(217, 83, 79, 0.1);
+            color: #d9534f;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        /* Media Queries for Responsive Design */
+        @media screen and (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            body {
+                padding: 10px;
+            }
+            .form-section {
+                padding: 15px 10px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-links a {
+                padding: 6px 8px;
+            }
+            .container {
+                padding: 15px 10px;
+            }
+            h1 {
+                padding: 10px 5px;
+                margin: -15px -10px 15px -10px;
+            }
+            .form-section {
+                padding: 10px;
+            }
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-title">Foster AI Call and Biography Generation</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="transcript-viewer-local.html">Transcript Viewer</a>
+            <a href="listen.html">Listen</a>
+            <a href="callNow.html">Call Now</a>
+            <a href="fosterInfo.html">Foster Information</a>
+            <a href="authors.html">Project Authors</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Foster Information</h1>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2>Foster Intake Form</h2>
+            <div class="success-message" id="successMessage">
+                    Foster information successfully added!
+            </div>
+            
+                <form id="fosterForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div class="error" id="firstNameError">Please enter a valid first name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <div class="error" id="lastNameError">Please enter a valid last name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petName">Pet Name</label>
+                        <input type="text" id="petName" name="petName" required>
+                        <div class="error" id="petNameError">Please enter your pet's name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactTime">Preferred Contact Time</label>
+                        <select id="contactTime" name="contactTime" required>
+                            <option value="">Select a time</option>
+                            <option value="Anytime">Anytime</option>
+                            <option value="Morning (9am-12pm)">Morning (9am-12pm)</option>
+                            <option value="Afternoon (12pm-5pm)">Afternoon (12pm-5pm)</option>
+                            <option value="Evening (5pm-9pm)">Evening (5pm-9pm)</option>
+                        </select>
+                        <div class="error" id="contactTimeError">Please select a preferred contact time</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error" id="emailError">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error" id="phoneError">Please enter a valid phone number</div>
+                </div>
+                
+                    <button type="submit">Submit</button>
+                </form>
+                </div>
+            
+            <div class="customer-list" id="customerList">
+                <h2>Foster List</h2>
+                <div id="customerItems"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('fosterForm');
+            const customerList = document.getElementById('customerList');
+            const customerItems = document.getElementById('customerItems');
+            const successMessage = document.getElementById('successMessage');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Reset error messages
+                document.querySelectorAll('.error').forEach(error => {
+                    error.style.display = 'none';
+                });
+                
+                let isValid = true;
+                
+                // Validate first name
+                const firstName = document.getElementById('firstName').value.trim();
+                if (firstName === '') {
+                    document.getElementById('firstNameError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate last name
+                const lastName = document.getElementById('lastName').value.trim();
+                if (lastName === '') {
+                    document.getElementById('lastNameError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate pet name
+                const petName = document.getElementById('petName').value.trim();
+                if (petName === '') {
+                    document.getElementById('petNameError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate contact time
+                const contactTime = document.getElementById('contactTime').value;
+                if (contactTime === '') {
+                    document.getElementById('contactTimeError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate email
+                const email = document.getElementById('email').value.trim();
+                if (email === '' || !isValidEmail(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate phone
+                const phone = document.getElementById('phone').value.trim();
+                if (phone === '' || !isValidPhone(phone)) {
+                    document.getElementById('phoneError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                    
+                    // Add customer to list
+                    addCustomer({
+                        firstName,
+                        lastName,
+                        petName,
+                        contactTime,
+                        email,
+                        phone
+                    });
+                    
+                    // Clear form
+                    form.reset();
+                }
+            });
+            
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+            
+            function isValidPhone(phone) {
+                return /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
+            }
+            
+            function addCustomer(customer) {
+                const customerItem = document.createElement('div');
+                customerItem.classList.add('customer-item');
+                
+                const customerInfo = document.createElement('div');
+                customerInfo.classList.add('customer-info');
+                
+                customerInfo.innerHTML = `
+                    <p><strong>Name:</strong> ${customer.firstName} ${customer.lastName}</p>
+                    <p><strong>Pet:</strong> ${customer.petName}</p>
+                    <p><strong>Contact Time:</strong> ${customer.contactTime}</p>
+                    <p><strong>Email:</strong> ${customer.email}</p>
+                    <p><strong>Phone:</strong> ${customer.phone}</p>
+                `;
+                
+                customerItem.appendChild(customerInfo);
+                customerItems.appendChild(customerItem);
+            }
+        });
+    </script>
+</body>
+</html>

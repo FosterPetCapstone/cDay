@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listen to Call - Foster AI Call and Biography Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 3px solid gold;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #d9534f;
+            background-color: gold;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            word-wrap: break-word;
+        }
+        .nav-bar {
+            width: 100%;
+            min-height: 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 20px;
+            color: white;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+        .nav-title {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: bold;
+            padding: 10px 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+        .nav-links a:hover {
+            background-color: #555;
+        }
+        .content {
+            padding: 10px;
+            text-align: center;
+        }
+        .play-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 300px;
+        }
+        .play-button:hover {
+            background-color: #555;
+            transform: translateY(-2px);
+        }
+        .play-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status-message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            word-wrap: break-word;
+        }
+        .status-message.success {
+            background-color: rgba(217, 83, 79, 0.1);
+            color: #d9534f;
+        }
+        .status-message.error {
+            background-color: rgba(217, 83, 79, 0.1);
+            color: #d9534f;
+        }
+        .audio-player {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            display: none;
+        }
+        
+        /* Media Queries for Responsive Design */
+        @media screen and (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            .content {
+                padding: 10px 5px;
+            }
+            body {
+                padding: 10px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-links a {
+                padding: 6px 8px;
+            }
+            .container {
+                padding: 15px 10px;
+            }
+            h1 {
+                padding: 10px 5px;
+                margin: -15px -10px 15px -10px;
+            }
+            .audio-player {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-title">Foster AI Call and Biography Generation</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="transcript-viewer-local.html">Transcript Viewer</a>
+            <a href="listen.html">Listen</a>
+            <a href="callNow.html">Call Now</a>
+            <a href="fosterInfo.html">Foster Information</a>
+            <a href="authors.html">Project Authors</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Listen to Call Recording</h1>
+        
+        <div class="content">
+            <button id="playButton" class="play-button">Play Call Recording</button>
+            <div id="statusMessage" class="status-message"></div>
+            <audio id="audioPlayer" class="audio-player" controls>
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButton = document.getElementById('playButton');
+            const statusMessage = document.getElementById('statusMessage');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const RETELL_API_KEY = 'PLACEHOLDER';
+
+            playButton.addEventListener('click', async function() {
+                try {
+                    playButton.disabled = true;
+                    statusMessage.style.display = 'block';
+                    statusMessage.className = 'status-message';
+                    statusMessage.textContent = 'Loading audio...';
+
+                    // First get the call details to get the recording URL
+                    const callResponse = await fetch(`https://api.retellai.com/v2/get-call/call_972e6aba17480eefda525070fa4`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${RETELL_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!callResponse.ok) {
+                        throw new Error('Failed to fetch call details');
+                    }
+
+                    const callData = await callResponse.json();
+                    
+                    if (!callData.recording_url) {
+                        throw new Error('No recording available for this call');
+                    }
+
+                    // Now fetch the audio file using the recording URL
+                    const audioResponse = await fetch(callData.recording_url, {
+                        method: 'GET'
+                    });
+
+                    if (!audioResponse.ok) {
+                        throw new Error('Failed to fetch audio file');
+                    }
+
+                    // Convert the response to a blob
+                    const audioBlob = await audioResponse.blob();
+                    
+                    // Create a URL for the blob
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Set the audio source and show the player
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                    
+                    // Update status message
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = 'Audio loaded successfully!';
+                    
+                    // Play the audio
+                    audioPlayer.play();
+                } catch (error) {
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = `Error: ${error.message}`;
+                } finally {
+                    playButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

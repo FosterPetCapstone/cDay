@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angels Among Us - AI Powered Phone Call and Bio Generation App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 3px solid gold;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #d9534f;
+            background-color: gold;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            word-wrap: break-word;
+        }
+        .nav-bar {
+            width: 100%;
+            min-height: 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 20px;
+            color: white;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+        .nav-title {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: bold;
+            padding: 10px 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+        .nav-links a:hover {
+            background-color: #555;
+        }
+        .about-content {
+            padding: 10px;
+            line-height: 1.8;
+        }
+        .about-content p {
+            margin-bottom: 15px;
+        }
+        .feature-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .feature-section h2 {
+            color: #d9534f;
+            margin-top: 0;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+        }
+        .feature-section ul {
+            padding-left: 20px;
+        }
+        
+        /* Media Queries for Responsive Design */
+        @media screen and (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            body {
+                padding: 10px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-links a {
+                padding: 6px 8px;
+            }
+            .container {
+                padding: 15px 10px;
+            }
+            h1 {
+                padding: 10px 5px;
+                margin: -15px -10px 15px -10px;
+            }
+            .feature-section {
+                padding: 10px;
+                margin: 15px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-title">Angels Among Us - AI Powered Phone Call and Bio Generation App</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="transcript-viewer-local.html">Transcript Viewer</a>
+            <a href="listen.html">Listen</a>
+            <a href="callNow.html">Call Now</a>
+            <a href="fosterInfo.html">Foster Information</a>
+            <a href="authors.html">Project Authors</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>AI Powered Phone Call and Bio Generation App for Angels Among Us</h1>
+        
+        <div class="about-content">
+            <p>Welcome to our showcase of the AI-powered pet biography solution developed for Angels Among Us Pet Rescue. This innovative platform addresses critical bottlenecks in the pet adoption process, dramatically improving both operational efficiency and adoption success rates.</p>
+            
+            <div class="feature-section">
+                <h2>The Challenge</h2>
+                <p>Angels Among Us Pet Rescue, a nonprofit organization dedicated to saving and rehoming animals, faced significant challenges in their adoption workflow:</p>
+                <ul>
+                    <li>Time-consuming creation of compelling pet biographies</li>
+                    <li>Difficulty coordinating photography sessions</li>
+                    <li>Foster volunteers struggling to find time for interviews</li>
+                    <li>Rescue staff spending valuable resources on back-and-forth communication</li>
+                    <li>Pet biographies often lacking emotional engagement needed to attract adopters</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h2>Our Solution</h2>
+                <p>We developed a web and mobile application powered by AI to automate key parts of the foster communication workflow:</p>
+                <ul>
+                    <li>AI-powered phone interviews with foster caregivers</li>
+                    <li>Automatic transcription and analysis of conversations</li>
+                    <li>Generation of emotionally resonant pet biographies based on adoption data</li>
+                    <li>Automated photography team notifications when updated photos are needed</li>
+                    <li>Streamlined coordination between foster volunteers and rescue staff</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h2>Technology Stack</h2>
+                <p>Our solution leverages cutting-edge technologies:</p>
+                <ul>
+                    <li>Twilio and Retell AI for live call handling</li>
+                    <li>Python backend for processing logic</li>
+                    <li>OpenAI for transcription and biography generation</li>
+                    <li>React for building a responsive user interface</li>
+                    <li>PostgreSQL for secure data management</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h2>Impact</h2>
+                <p>By implementing our solution, Angels Among Us Pet Rescue has experienced:</p>
+                <ul>
+                    <li>Increased speed and effectiveness of pet adoptions</li>
+                    <li>Reduced workload for rescue staff</li>
+                    <li>More compelling pet biographies that connect emotionally with potential adopters</li>
+                    <li>Improved coordination between foster volunteers and the rescue team</li>
+                    <li>Faster time-to-adoption for rescue animals</li>
+                </ul>
+            </div>
+
+            <div class="feature-section">
+                <h2>Research & Development Process</h2>
+                <p>Our development followed a structured approach:</p>
+                <ul>
+                    <li>Identified key pain points through interviews with foster volunteers</li>
+                    <li>Reviewed current processes used by Angels Among Us</li>
+                    <li>Created user stories and requirements to guide development</li>
+                    <li>Implemented agile methodology for iterative design and testing</li>
+                    <li>Integrated security and privacy best practices throughout</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

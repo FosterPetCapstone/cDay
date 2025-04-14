@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Authors - Foster AI Call and Biography Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 3px solid gold;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #d9534f;
+            background-color: gold;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            word-wrap: break-word;
+        }
+        .nav-bar {
+            width: 100%;
+            min-height: 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 20px;
+            color: white;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+        .nav-title {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: bold;
+            padding: 10px 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+        .nav-links a:hover {
+            background-color: #555;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .team-member {
+            text-align: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        .headshot {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid gold;
+        }
+        .member-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .member-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0077b5;
+            margin-bottom: 5px;
+            text-decoration: none;
+            word-break: break-word;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .member-name:hover {
+            text-decoration: underline;
+        }
+        .member-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+        .member-email {
+            color: #333;
+            font-size: 12px;
+            margin-bottom: 10px;
+            word-break: break-all;
+            width: 100%;
+            text-align: center;
+        }
+        .linkedin-link {
+            color: #0077b5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .linkedin-link:hover {
+            text-decoration: underline;
+        }
+        .placeholder-headshot {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+            border: 3px solid gold;
+        }
+        
+        /* Media Queries for Responsive Design */
+        @media screen and (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            body {
+                padding: 10px;
+            }
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-links a {
+                padding: 6px 8px;
+            }
+            .container {
+                padding: 15px 10px;
+            }
+            h1 {
+                padding: 10px 5px;
+                margin: -15px -10px 15px -10px;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+                padding: 5px;
+            }
+            .team-member {
+                padding: 10px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .headshot {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            .member-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-title">Foster AI Call and Biography Generation</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="transcript-viewer-local.html">Transcript Viewer</a>
+            <a href="listen.html">Listen</a>
+            <a href="callNow.html">Call Now</a>
+            <a href="fosterInfo.html">Foster Information</a>
+            <a href="authors.html">Project Authors</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Project Authors</h1>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="JoshuaCrawford.jpg" alt="Joshua Crawford" class="headshot">
+                <div class="member-info">
+                    <a href="https://www.linkedin.com/in/crawford-joshua" class="member-name" target="_blank">Joshua Crawford</a>
+                    <div class="member-title">Team Lead and AI Development</div>
+                    <div class="member-email">jcraw120@students.kennesaw.edu</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="KatlinLahr.jpg" alt="Katlin Lahr" class="headshot">
+                <div class="member-info">
+                    <a href="http://linkedin.com/in/katlin-lahr-715857215" class="member-name" target="_blank">Katlin Lahr</a>
+                    <div class="member-title">Co-Team Lead and Backend Development</div>
+                    <div class="member-email">Klahr@students.kennesaw.edu</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="BrittanyDaniel.jpg" alt="Brittany Daniel" class="headshot">
+                <div class="member-info">
+                    <a href="https://www.linkedin.com/in/brittany-daniel-001622263" class="member-name" target="_blank">Brittany Daniel</a>
+                    <div class="member-title">Security and Organization</div>
+                    <div class="member-email">bpayne46@students.kennesaw.edu</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="MikaylaHaigh.jpg" alt="Mikayla Haigh" class="headshot">
+                <div class="member-info">
+                    <a href="https://www.linkedin.com/in/mikayla-haigh-8614b11b9" class="member-name" target="_blank">Mikayla Haigh</a>
+                    <div class="member-title">Frontend Development</div>
+                    <div class="member-email">mhaigh@students.kennesaw.edu</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="DariaMorhun.jpg" alt="Daria Morhun" class="headshot">
+                <div class="member-info">
+                    <a href="https://www.linkedin.com/in/daria-morhun-08385919a" class="member-name" target="_blank">Daria Morhun</a>
+                    <div class="member-title">AI Development and Organization</div>
+                    <div class="member-email">dmorhun@students.kennesaw.edu</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
