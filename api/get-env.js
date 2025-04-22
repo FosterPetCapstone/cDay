@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
 router.post('/', (req, res) => {
     try {
@@ -12,13 +14,26 @@ router.post('/', (req, res) => {
             });
         }
 
-        // Get the environment variable
-        const value = process.env[key];
+        // First try to get from process.env (Render environment variables)
+        let value = process.env[key];
+        
+        // If not found in process.env, try to read from /etc/secrets/
+        if (!value) {
+            const secretFilePath = `/etc/secrets/${key}`;
+            console.log(`Checking secret file: ${secretFilePath}`);
+            
+            if (fs.existsSync(secretFilePath)) {
+                value = fs.readFileSync(secretFilePath, 'utf8').trim();
+                console.log(`Found value in ${secretFilePath}`);
+            } else {
+                console.log(`Secret file not found: ${secretFilePath}`);
+            }
+        }
         
         if (!value) {
             return res.status(404).json({ 
                 success: false,
-                error: `Environment variable ${key} not found` 
+                error: `API key not found. Please check that the secret file /etc/secrets/${key} exists on the server.` 
             });
         }
 
