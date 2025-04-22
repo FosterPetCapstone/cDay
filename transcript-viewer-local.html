@@ -257,12 +257,8 @@
         </div>
     </div>
 
-    <script type="module">
-        import config from './js/config.js';
-        
-        // API Keys are now managed through the config module
-        const RETELL_API_KEY = config.getRetellApiKey();
-        const OPENAI_API_KEY = config.getOpenAiApiKey();
+    <script src="js/config.js"></script>
+    <script>
         let currentTranscript = '';
 
         // Set default call ID when page loads
@@ -290,10 +286,15 @@
             document.getElementById('generateBioBtn').disabled = true;
 
             try {
-                const response = await fetch(`${config.RETELL_API_BASE_URL}/get-call/${callId}`, {
+                const retellApiKey = await config.getRetellApiKey();
+                if (!retellApiKey) {
+                    throw new Error('RETELL_API_KEY not found');
+                }
+
+                const response = await fetch(`https://api.retellai.com/v2/get-call/${callId}`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${RETELL_API_KEY}`,
+                        'Authorization': `Bearer ${retellApiKey}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -328,11 +329,16 @@
             generateBioBtn.disabled = true;
 
             try {
-                const response = await fetch(`${config.OPENAI_API_BASE_URL}/chat/completions`, {
+                const openaiApiKey = await config.getOpenaiApiKey();
+                if (!openaiApiKey) {
+                    throw new Error('OPENAI_API_KEY not found');
+                }
+
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`
+                        'Authorization': `Bearer ${openaiApiKey}`
                     },
                     body: JSON.stringify({
                         model: "gpt-4",

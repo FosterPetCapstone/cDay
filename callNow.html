@@ -216,15 +216,13 @@
         </div>
     </div>
 
-    <script type="module">
-        import config from './js/config.js';
-        
+    <script src="js/config.js"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const phoneNumberInput = document.getElementById('phoneNumber');
             const phoneError = document.getElementById('phoneError');
             const callButton = document.getElementById('callButton');
             const statusMessage = document.getElementById('statusMessage');
-            const RETELL_API_KEY = config.getRetellApiKey();
 
             // Add a better phone validation
             phoneNumberInput.addEventListener('input', validatePhoneNumber);
@@ -267,6 +265,11 @@
                     statusMessage.className = 'status-message';
                     statusMessage.textContent = 'Initiating call...';
 
+                    const retellApiKey = await config.getRetellApiKey();
+                    if (!retellApiKey) {
+                        throw new Error('RETELL_API_KEY not found');
+                    }
+
                     let phoneNumber = phoneNumberInput.value.trim();
                     
                     // Strip all non-digit characters
@@ -283,10 +286,10 @@
                     console.log('Formatted phone number:', e164Number);
                     
                     // Call the Retell API to create a phone call
-                    const response = await fetch(`${config.RETELL_API_BASE_URL}/create-phone-call`, {
+                    const response = await fetch('https://api.retellai.com/v2/create-phone-call', {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${RETELL_API_KEY}`,
+                            'Authorization': `Bearer ${retellApiKey}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({

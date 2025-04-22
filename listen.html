@@ -181,12 +181,12 @@
         </div>
     </div>
 
+    <script src="js/config.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const playButton = document.getElementById('playButton');
             const statusMessage = document.getElementById('statusMessage');
             const audioPlayer = document.getElementById('audioPlayer');
-            const RETELL_API_KEY = 'key_0132fff46bdae935711801774617';
 
             playButton.addEventListener('click', async function() {
                 try {
@@ -195,11 +195,16 @@
                     statusMessage.className = 'status-message';
                     statusMessage.textContent = 'Loading audio...';
 
+                    const retellApiKey = await config.getRetellApiKey();
+                    if (!retellApiKey) {
+                        throw new Error('RETELL_API_KEY not found');
+                    }
+
                     // First get the call details to get the recording URL
                     const callResponse = await fetch(`https://api.retellai.com/v2/get-call/call_972e6aba17480eefda525070fa4`, {
                         method: 'GET',
                         headers: {
-                            'Authorization': `Bearer ${RETELL_API_KEY}`,
+                            'Authorization': `Bearer ${retellApiKey}`,
                             'Content-Type': 'application/json'
                         }
                     });

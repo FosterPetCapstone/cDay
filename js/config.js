@@ -1,44 +1,39 @@
 // Configuration management for API keys and endpoints
 const config = {
-    // API Keys
-    RETELL_API_KEY: process.env.RETELL_API_KEY || window.ENV?.RETELL_API_KEY,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY || window.ENV?.OPENAI_API_KEY,
-
-    // API Base URLs
-    RETELL_API_BASE_URL: process.env.RETELL_API_BASE_URL || window.ENV?.RETELL_API_BASE_URL || 'https://api.retellai.com/v2',
-    OPENAI_API_BASE_URL: process.env.OPENAI_API_BASE_URL || window.ENV?.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
-
-    // Function to get Retell API Key
-    getRetellApiKey: function() {
-        return this.RETELL_API_KEY;
-    },
-
-    // Function to get OpenAI API Key
-    getOpenAiApiKey: function() {
-        return this.OPENAI_API_KEY;
-    },
-
     // Function to get environment variables
-    getApiKey: function() {
+    getEnvVar: function(key) {
         // For local development, try to get from environment
-        if (window.ENV && window.ENV.API_KEY) {
-            return window.ENV.API_KEY;
+        if (window.ENV && window.ENV[key]) {
+            return window.ENV[key];
         }
         
-        // For production (GitHub Pages)
-        // Replace this URL with your proxy service URL
-        return fetch('https://your-proxy-service.com/api/getKey')
-            .then(response => response.json())
-            .then(data => data.apiKey)
+        // For production (Render)
+        // Try to get from /etc/secrets/ENV first
+        return fetch(`/etc/secrets/${key}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                // If not found in /etc/secrets, try root directory
+                return fetch(`/${key}`)
+                    .then(response => response.text())
+                    .catch(() => null);
+            })
             .catch(error => {
-                console.error('Error fetching API key:', error);
+                console.error(`Error fetching ${key}:`, error);
                 return null;
             });
     },
 
-    // Base API URL
-    apiBaseUrl: window.ENV?.API_BASE_URL || 'https://api.example.com'
-};
+    // Get API keys
+    getRetellApiKey: async function() {
+        return await this.getEnvVar('RETELL_API_KEY');
+    },
 
-// Export the config object
-export default config; 
+    getOpenaiApiKey: async function() {
+        return await this.getEnvVar('OPENAI_API_KEY');
+    },
+
+    // Base API URL
+    apiBaseUrl: window.ENV?.API_BASE_URL || 'https://api.retellai.com'
+}; 
