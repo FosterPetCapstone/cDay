@@ -1,28 +1,32 @@
 // Configuration management for API keys and endpoints
 const config = {
     // Function to get environment variables
-    getEnvVar: function(key) {
+    getEnvVar: async function(key) {
         // For local development, try to get from environment
         if (window.ENV && window.ENV[key]) {
             return window.ENV[key];
         }
         
         // For production (Render)
-        // Try to get from /etc/secrets/ENV first
-        return fetch(`/etc/secrets/${key}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                }
-                // If not found in /etc/secrets, try root directory
-                return fetch(`/${key}`)
-                    .then(response => response.text())
-                    .catch(() => null);
-            })
-            .catch(error => {
-                console.error(`Error fetching ${key}:`, error);
-                return null;
+        // Try to get from the server-side environment
+        try {
+            const response = await fetch('/api/get-env', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key })
             });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.value;
+            }
+            throw new Error(`Failed to fetch ${key}`);
+        } catch (error) {
+            console.error(`Error fetching ${key}:`, error);
+            return null;
+        }
     },
 
     // Get API keys
