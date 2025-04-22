@@ -18,11 +18,17 @@ const config = {
                 body: JSON.stringify({ key })
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                return data.value;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            throw new Error(`Failed to fetch ${key}`);
+
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch environment variable');
+            }
+
+            return data.value;
         } catch (error) {
             console.error(`Error fetching ${key}:`, error);
             return null;
