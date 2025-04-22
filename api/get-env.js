@@ -14,7 +14,18 @@ router.post('/', (req, res) => {
             });
         }
 
-        // Try to read from /etc/secrets/
+        // First check if the key exists in the environment variables
+        // Render sets these directly from the dashboard
+        if (process.env[key]) {
+            console.log(`Found ${key} in environment variables`);
+            return res.json({ 
+                success: true,
+                error: null,
+                value: process.env[key]
+            });
+        }
+
+        // Try to read from /etc/secrets/ (Render mounted secrets)
         const secretFilePath = `/etc/secrets/${key}`;
         console.log(`Checking secret file: ${secretFilePath}`);
         
@@ -22,6 +33,10 @@ router.post('/', (req, res) => {
             if (fs.existsSync(secretFilePath)) {
                 const value = fs.readFileSync(secretFilePath, 'utf8').trim();
                 console.log(`Found value in ${secretFilePath}`);
+                
+                // Set it in the environment for future use
+                process.env[key] = value;
+                
                 return res.json({ 
                     success: true,
                     error: null,
@@ -31,7 +46,7 @@ router.post('/', (req, res) => {
                 console.log(`Secret file not found: ${secretFilePath}`);
                 return res.status(404).json({ 
                     success: false,
-                    error: `Secret file not found at ${secretFilePath}`,
+                    error: `Key "${key}" not found in environment or secret files`,
                     value: null
                 });
             }
