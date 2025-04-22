@@ -216,13 +216,15 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import config from './js/config.js';
+        
         document.addEventListener('DOMContentLoaded', function() {
             const phoneNumberInput = document.getElementById('phoneNumber');
             const phoneError = document.getElementById('phoneError');
             const callButton = document.getElementById('callButton');
             const statusMessage = document.getElementById('statusMessage');
-            const RETELL_API_KEY = 'key_0132fff46bdae935711801774617';
+            const RETELL_API_KEY = config.getRetellApiKey();
 
             // Add a better phone validation
             phoneNumberInput.addEventListener('input', validatePhoneNumber);
@@ -281,7 +283,7 @@
                     console.log('Formatted phone number:', e164Number);
                     
                     // Call the Retell API to create a phone call
-                    const response = await fetch('https://api.retellai.com/v2/create-phone-call', {
+                    const response = await fetch(`${config.RETELL_API_BASE_URL}/create-phone-call`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${RETELL_API_KEY}`,
